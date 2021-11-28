@@ -1,0 +1,18 @@
+{
+    "Settings": true,
+    "Company": true,
+    "Role": true,
+    "User": true,
+    "Module": true,
+    "Model": true,
+    "Bank": true,
+    "Accounts": true,
+    "Warehouse": true,
+    "Product": true,
+    "Seller": true,
+    "Customer": true,
+    "Supplier": true,
+    "Reports": true,
+    "FiscalYears": true,
+    "ActivityLog": true
+}
