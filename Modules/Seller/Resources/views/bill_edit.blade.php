@@ -189,6 +189,8 @@ $('#return_back').click(function() {
             $('#product_id_field').val(select_val);
             var url = baseUrl + "product/get_price/" + select_val;
             getAjaxdata(url, requestCallback, 'get');
+
+            
         });
 
     $("#customer_Select").select2()
