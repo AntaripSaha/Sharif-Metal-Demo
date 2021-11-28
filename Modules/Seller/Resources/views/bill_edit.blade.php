@@ -128,6 +128,7 @@
                                         <td class="text-right">
                                             <span>{{$dis_amount}}</span>
                                         </td>
+                                   
                                     </tr>
                                     <tr>
                                         <td class="text-right"><b>Total :</b></td>
@@ -189,8 +190,6 @@ $('#return_back').click(function() {
             $('#product_id_field').val(select_val);
             var url = baseUrl + "product/get_price/" + select_val;
             getAjaxdata(url, requestCallback, 'get');
-
-            
         });
 
     $("#customer_Select").select2()
