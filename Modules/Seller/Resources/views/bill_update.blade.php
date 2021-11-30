@@ -84,26 +84,25 @@
                                     @foreach($req_products as $prod)
                                     <tr class="text-center">
                                         <td>
-                                            <input type="hidden" name="product_name[]" value="{{ $prod->products->product_name }}">{{ $prod->products->product_name }}
+                                            <input type="hidden" name="product_name" value="{{ $prod->products->product_name }}">{{ $prod->products->product_name }}
                                         </td>
                                         <td>
-                                            <input type="hidden" name="product_id[]" value="{{ $prod->product_id }}">
+                                            <input type="hidden" name="product_id[]" value="{{ $prod->Products->product_id }}">
                                             
                                         {{ $prod->Products->product_id }}
 
                                         </td>
                                         <td> 
-                                            <input type="number" readonly name="del_qnt[]" id="del_qnt"  value="{{ $prod->del_qnt }}">
+                                            <input type="number" name="del_qnt" id="del_qnt"  value="{{ $prod->del_qnt }}">
                                             
                                         </td>
                                         <td>
-                                            <input type="number" name="unit_price[]" id="unit_price" value="{{ $prod->unit_price }}">
+                                            <input type="number" name="product_price" id="product_price" value="{{ $prod->unit_price }}">
                                             </td>
-                                        <?php $subtotal = $prod->del_qnt * (int)$prod->unit_price ?>
-                                        <td class="text-right" id="qt" onkeyup="quantity_calculate(this);">{{ $subtotal }}</td>
+                                        <td class="text-right" id="qt" onkeyup="quantity_calculate(this);">{{ $prod->del_qnt * $prod->unit_price }}</td>
                                     </tr>
                                     <?php
-                                        $total += ($prod->del_qnt * (int)$prod->unit_price);
+                                        $total += ($prod->del_qnt * $prod->unit_price);
                                     ?>
                                     @endforeach
                                 </tbody>

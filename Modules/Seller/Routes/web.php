@@ -21,6 +21,7 @@ Route::prefix('seller')->group(function () {
 
 
     Route::any('/bill_edit/{id}', 'SellerController@bill_edit')->name('bill.edit');
+    Route::any('/bill_update/{id}', 'SellerController@bill_update')->name('bill.update');
 
     //Edit Requisition Details
     Route::any('/edit_sell_req_details/{id}', 'SellerController@edit_requisition_details')->name('edit_requisition_details');

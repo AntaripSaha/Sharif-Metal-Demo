@@ -153,50 +153,31 @@ class SellerController extends BaseController
             return $bill_no;
         }
     }
+    
+    /**
+     * Updating Request Products Table with price and Production Price Start
+     */
+    public function unit_price_update()
+    {
+       $product_id = RequestProduct::groupBy('product_id')->select('product_id')->get();
+       $product_info = Product::whereIn('id', $product_id )->select('id','price','production_price')->get();
 
+         foreach( $product_info as  $product_info){
+
+          $request_product = RequestProduct::where('product_id', $product_info['id'])
+            ->update(array('unit_price' => $product_info['price']));
+            $request_product = RequestProduct::where('product_id', $product_info['id'])
+            ->update(array('production_price' =>  $product_info['production_price']));
+         }
+    }
+    /**
+     * Add Sell Request
+     * @params $request
+     */
     public function add_sell(Request $request)
     {
 
-        
-        
-    //    $product_id = RequestProduct::groupBy('product_id')->select('product_id')->get();
-    //    $product_info = Product::whereIn('id', $product_id )->select('id','price','production_price')->get();
-    //    $arr=[];
-    //      foreach( $product_info as $product_info){
-
-    //         array_push($arr, $product_info->price);
-             
-
-    //     //   $request_product = RequestProduct::where('product_id', $product_info['id'])
-    //     //     ->update(array('unit_price' => $product_info['price']));
-    //     //     $request_product = RequestProduct::where('product_id', $product_info['id'])
-    //     //     ->update(array('production_price' =>  $product_info['production_price']));
-    //      }
-    //      return $arr;
-
-      
-
-
-
-
-    // Updating Request Products Table with price and Production Price Start
-         
-    //    $product_id = RequestProduct::groupBy('product_id')->select('product_id')->get();
-    //    $product_info = Product::whereIn('id', $product_id )->select('id','price','production_price')->get();
-
-    //      foreach( $product_info as  $product_info){
-
-    //       $request_product = RequestProduct::where('product_id', $product_info['id'])
-    //         ->update(array('unit_price' => $product_info['price']));
-    //         $request_product = RequestProduct::where('product_id', $product_info['id'])
-    //         ->update(array('production_price' =>  $product_info['production_price']));
-    //      }
-
-      
-
-    // Updating Request Products Table with price and Production Price End
-       
-        
+  
         if (!$this->user->can('add_sells', app('Modules\Seller\Entities\Seller'))) {
             return redirect()->route('users.index')->with('flash', array('status' => 'error', 'message' => 'permission denied'));
         }
@@ -239,6 +220,7 @@ class SellerController extends BaseController
 
             $re_id = SellRequest::createRequest($data);
             foreach ($data['product_id'] as $key => $value) {
+
                 $n_data['product_id'] = $data['product_id'][$key];
                 $product_info = Product::where('id', $n_data['product_id'])->first();
                 $n_data['unit_price'] = $product_info->price;
@@ -247,6 +229,7 @@ class SellerController extends BaseController
                 $n_data['qnty'] = $data['qnty'][$key];
                 $n_data['prod_disc'] = $data['prod_disc'][$key];
                 $n_data['req_id'] = $re_id;
+
                 RequestProduct::createProductReq($n_data);
             }
             return response()->json(['status' => 'success'], 200);
@@ -594,43 +577,7 @@ class SellerController extends BaseController
     }
 
 
-    // Bill Edit Start
-    public function bill_edit($id)
-    {
-        $cus_id = SellRequest::select(
-            'customer_id',
-            'req_id',
-            'seller_id',
-            'v_date',
-            'del_amount',
-            'is_approved',
-            'remarks',
-            'del_discount',
-            'company_id',
-            'sale_disc',
-            'sale_discount_overwrite'
-        )->with('seller')->where('id', $id)->first();
-        $data = Customer::with('accounts')->where('id', $cus_id->customer_id)->first();
-        $seller = User::select('name')->where('id', $cus_id->seller_id)->first();
-        $cus_name = $data->customer_name;
-        $seller_name = $seller->name;
-        $v_date = $cus_id->v_date;
-        $request_id = $cus_id->req_id;
-        $req_id = $id;
-        $remarks = $cus_id->remarks;
-        $sale_disc = $cus_id->sale_disc;
-        $sale_discount_overwrite = $cus_id->sale_discount_overwrite;
-        $req_products = RequestProduct::with('products')->where('req_id', $id)->get();
-        $total_amount = (int)$cus_id->del_amount;
-        $dis_amount = (int)$cus_id->del_discount;
-        $edate = date('Y-m-d');
-        $company_info = Company::where('id', $cus_id->company_id)->first();
-        return view('seller::bill_edit', compact('sale_disc', 'sale_discount_overwrite', 'dis_amount', 'req_id', 'req_products', 'cus_name', 'v_date', 'total_amount', 'seller_name', 'remarks', 'request_id', 'company_info', 'edate', 'cus_id'));
-
-        return view('seller::bill_edit');
-    }
-    // Bill Edit End
-
+ 
 
 
     public function manage_chalan(Request $request)
@@ -1369,6 +1316,5 @@ class SellerController extends BaseController
     }
     // rejected_sales method end
 
-
-
+   
 }
