@@ -75,4 +75,6 @@ Route::prefix('seller')->group(function () {
     //Change Password Route Start
     Route::get("/changepassword/{id}", "SellerController@change_password_page")->name("seller.change.password.page");
     Route::post("/changepassword/{id}", "SellerController@change_password")->name("seller.change.password");
+
+    Route::any('/chalan_up', 'SellerController@chalan_update');
 });
